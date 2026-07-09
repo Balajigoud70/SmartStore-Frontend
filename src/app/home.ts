@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
     this.loadUserAddresses();
     this.loadUserOrdersFromDB(); 
   }
-
+//
   loadProductsFromBackend() {
     this.http.get<any[]>('${environment.apiUrl}/api/products/all').subscribe({
       next: (data) => {
