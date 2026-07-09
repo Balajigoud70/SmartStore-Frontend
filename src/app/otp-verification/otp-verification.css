@@ -1,0 +1,73 @@
+.otp-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.otp-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.brand-section { margin-bottom: 25px; }
+.store-badge { background: #eef2ff; color: #4f46e5; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; }
+h3 { color: #1e293b; font-size: 24px; margin-bottom: 10px; font-weight: 700; }
+.subtitle { color: #64748b; font-size: 14px; line-height: 1.5; margin-bottom: 25px; }
+
+.verification-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+
+.option-label {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+.option-label:hover:not(.disabled) { border-color: #4f46e5; background: #f8fafc; }
+.option-label.active { border-color: #4f46e5; background: #f5f7ff; }
+.option-label input[type="radio"] { margin-right: 12px; width: 18px; height: 18px; accent-color: #4f46e5; }
+.option-text strong { display: block; color: #1e293b; font-size: 14px; }
+.option-text p { margin: 2px 0 0 0; color: #64748b; font-size: 12px; }
+.option-label.disabled { background: #f1f5f9; cursor: not-allowed; opacity: 0.7; }
+
+.btn-get-otp {
+  width: 100%; background: #4f46e5; color: white; border: none; padding: 14px;
+  border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.3s ease;
+}
+.btn-get-otp:disabled { background: #cbd5e1; cursor: not-allowed; }
+.btn-get-otp:hover:not(:disabled) { background: #4338ca; }
+
+.otp-input-section { margin-top: 25px; animation: fadeIn 0.5s ease; }
+.success-alert { background: #f0fdf4; color: #16a34a; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; text-align: left; border: 1px solid #bbf7d0; }
+
+.input-group-custom { text-align: left; margin-bottom: 25px; }
+.input-group-custom label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.input-group-custom input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 24px; text-align: center; letter-spacing: 6px; font-weight: bold; transition: all 0.3s ease; }
+.input-group-custom input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+
+.btn-submit-otp { width: 100%; background: #10b981; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s ease; }
+.btn-submit-otp:hover:not(:disabled) { background: #059669; }
+.btn-submit-otp:disabled { background: #a7f3d0; cursor: not-allowed; }
+
+.success-p { color: #475569; margin-bottom: 25px; }
+.success-screen .success-icon { font-size: 40px; color: #10b981; margin-bottom: 15px; }
+.btn-goto-login { background: #4f46e5; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+.btn-goto-login:hover { background: #4338ca; }
+
+/* 🌀 లోడింగ్ చక్రం యానిమేషన్ బ్రదర్ */
+.spinner-container { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.spinner { width: 18px; height: 18px; border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

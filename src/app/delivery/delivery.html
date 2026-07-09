@@ -1,0 +1,182 @@
+<div class="delivery-container" style="padding: 20px; font-family: sans-serif; background: #f8fafc; min-height: 100vh; color: #1e293b;">
+ 
+  <header style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+    <h2 style="margin: 0; font-size: 20px;">🚚 SmartStore Partner Dashboard</h2>
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="background: #16a34a; color: white; padding: 8px 16px; border-radius: 6px; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);">
+        💵 Wallet: ₹{{ (partnerProfile.walletBalance || 0) | number:'1.2-2' }}
+      </div>
+
+      <div (click)="toggleProfileModal()" style="width: 38px; height: 38px; background: #1e293b; border: 2px solid #38bdf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; user-select: none;" title="My Profile & Bank Transfer">
+        👤
+      </div>
+
+      <button (click)="logoutUser()" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">🚪 Logout</button>
+    </div>
+  </header>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+    <button (click)="activeTab = 'pool'" [style.background]="activeTab === 'pool' ? '#0284c7' : 'white'" [style.color]="activeTab === 'pool' ? 'white' : '#475569'" style="border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+      📋 Order Pool ({{ openOrdersPool.length }})
+    </button>
+    <button (click)="activeTab = 'picked'" [style.background]="activeTab === 'picked' ? '#0284c7' : 'white'" [style.color]="activeTab === 'picked' ? 'white' : '#475569'" style="border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+      🛵 Picked Orders ({{ pickedOrders.length }})
+    </button>
+    <button (click)="activeTab = 'history'" [style.background]="activeTab === 'history' ? '#0284c7' : 'white'" [style.color]="activeTab === 'history' ? 'white' : '#475569'" style="border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+      📜 Order History
+    </button>
+  </div>
+
+  <div *ngIf="activeTab === 'pool'" class="orders-section">
+    <h3 style="margin-top: 0; color: #0f172a; margin-bottom: 15px; font-size: 16px;">📦 Available Orders in Market</h3>
+    
+    <div *ngIf="openOrdersPool.length === 0" style="background: white; padding: 40px; text-align: center; border-radius: 12px; border: 1px solid #e2e8f0; color: #64748b; font-weight: 500;">
+      ప్రస్తుతానికి మార్కెట్ లో ఏ ఆర్డర్స్ ఖాళీగా లేవు బ్రదర్! 📭
+    </div>
+
+    <div *ngIf="openOrdersPool.length > 0" style="display: flex; flex-direction: column; gap: 15px;">
+      <div *ngFor="let order of openOrdersPool" 
+           style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        
+        <div>
+          <strong style="color: #0f172a; font-size: 16px; display: block; margin-bottom: 6px;">
+            Order ID: #{{ order.orderId }}
+          </strong>
+          <!-- 🎯 ఇక్కడ అడ్రస్ మాత్రమే వస్తుంది -->
+          <p style="margin: 4px 0; font-size: 14px; color: #475569;">
+            📍 <strong>Address:</strong> {{ order.fullAddress || 'Address not available' }}
+          </p>
+        </div>
+
+        <div>
+          <button (click)="acceptOrder(order.orderId || order.id)" 
+                  style="background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">
+            🤝 Accept Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'picked'" class="orders-section">
+    <h3 style="margin-top: 0; color: #0f172a; margin-bottom: 15px; font-size: 16px;">🛵 Active Orders (వివరాల కోసం ఐడీ పై క్లిక్ చెయ్ స్వామి)</h3>
+    
+    <div *ngIf="pickedOrders.length === 0" style="background: white; padding: 40px; text-align: center; border-radius: 12px; border: 1px solid #e2e8f0; color: #64748b; font-weight: 500;">
+      నువ్వు ప్రస్తుతం ఎలాంటి ఆర్డర్ పికప్ చేసుకోలేదు బ్రదర్! పూల్ లో యాక్సెప్ట్ చెయ్. 🛵
+    </div>
+
+    <div *ngIf="pickedOrders.length > 0" style="display: flex; flex-direction: column; gap: 12px;">
+      <div *ngFor="let order of pickedOrders" (click)="openPickedOrderDetails(order)" style="background: white; border: 1px solid #0284c7; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.05);">
+        <div>
+          <strong style="color: #0284c7; font-size: 15px;">🆔 Order ID: #{{ order.orderId || order.id }}</strong>
+          <span style="font-size: 12px; color: #64748b; margin-left: 15px;">👉 క్లిక్ చేసి కస్టమర్ అడ్రస్, ఐటమ్స్ చూడు బ్రదర్</span>
+        </div>
+        <div style="font-weight: bold; color: #1e293b;">
+          ₹{{ (order.totalAmount || 0) | number:'1.2-2' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'history'" class="orders-section">
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+      <button (click)="historySubTab = 'delivered'" [style.border-bottom]="historySubTab === 'delivered' ? '3px solid #16a34a' : 'none'" style="background:none; border:none; padding:8px 15px; font-weight:bold; cursor:pointer; color: #1e293b;">✅ Delivered Orders</button>
+      <button (click)="historySubTab = 'cancelled'" [style.border-bottom]="historySubTab === 'cancelled' ? '3px solid #ef4444' : 'none'" style="background:none; border:none; padding:8px 15px; font-weight:bold; cursor:pointer; color: #1e293b;">❌ Failed / Cancelled</button>
+    </div>
+
+    <div *ngIf="historySubTab === 'delivered'">
+      <div *ngIf="deliveredHistory.length === 0" style="color: #64748b; font-size: 14px; padding: 20px;">ఇంకా ఎలాంటి ఆర్డర్లు డెలివరీ చేయలేదు బ్రదర్!</div>
+      <div *ngFor="let order of deliveredHistory" style="background:white; border:1px solid #e2e8f0; padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>ID: #{{ order.orderId || order.id }}</strong>
+          <p style="margin:4px 0 0 0; font-size:12px; color:#64748b;">Date: {{ order.date }} | Area: {{ order.cityOrTown }}</p>
+        </div>
+        <strong style="color:#16a34a;">+ ₹35.00 Earned 💰</strong>
+      </div>
+    </div>
+
+    <div *ngIf="historySubTab === 'cancelled'">
+      <div *ngIf="cancelledHistory.length === 0" style="color: #64748b; font-size: 14px; padding: 20px;">క్యాన్సిల్ అయిన ఆర్డర్లు ఏమీ లేవు, సూపర్ బ్రదర్!</div>
+      <div *ngFor="let order of cancelledHistory" style="background:white; border:1px solid #e2e8f0; padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>ID: #{{ order.orderId || order.id }}</strong>
+          <p style="margin:4px 0 0 0; font-size:12px; color:#64748b;">Status: <span style="color:#ef4444;">Cancelled</span></p>
+        </div>
+        <strong style="color:#16a34a;">+ ₹35.00 (Compensated) 💰</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showPickedDetailModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="modal-box" style="background: white; width: 550px; border-radius: 12px; padding: 25px; color: #1e293b; box-shadow: 0 20px 25px rgba(0,0,0,0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+        <h3 style="margin: 0; color: #0284c7;">🎯 Order Delivery Details (#{{ selectedPickedOrder?.orderId }})</h3>
+        <button (click)="showPickedDetailModal = false" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #94a3b8;">✕</button>
+      </div>
+
+      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+        <p style="margin: 4px 0; font-size: 14px;">👤 <strong>Customer Name:</strong> {{ selectedPickedOrder?.customerName || 'Balu' }}</p>
+        <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+          📞 <strong>Phone:</strong> {{ selectedPickedOrder?.customerPhone || '9876543210' }}
+          <button style="background: #0284c7; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">📞 Call</button>
+        </p>
+        <p style="margin: 4px 0; font-size: 14px;">📍 <strong>Full Address:</strong> {{ selectedPickedOrder?.fullAddress || 'Address not available' }}</p>
+      </div>
+
+      <h4 style="margin: 10px 0 6px 0; font-size: 14px; color: #0f172a;">🛍️ Order Items List:</h4>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 15px; text-align: left;">
+        <thead>
+          <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+            <th style="padding: 6px;">Item Description</th>
+            <th style="padding: 6px; text-align: center;">Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of selectedPickedOrder?.products" style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 6px; font-weight: 500;">{{ item.name }}</td>
+            <td style="padding: 6px; text-align: center; color: #0284c7; font-weight: bold;">{{ item.qty || item.quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 20px;">
+        <span>Payment Mode: <strong>{{ selectedPickedOrder?.paymentType }}</strong></span>
+        <span style="color:#16a34a; font-weight: bold;">Total Bill: ₹{{ selectedPickedOrder?.totalAmount | number:'1.2-2' }}</span>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button (click)="markAsDelivered(selectedPickedOrder.orderId || selectedPickedOrder.id)" style="flex: 1; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✅ Mark as Delivered</button>
+        <button (click)="cancelOrderFromDelivery(selectedPickedOrder.orderId || selectedPickedOrder.id)" style="flex: 1; background: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">❌ Cancel / Issue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showProfileModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="modal-box" style="background: white; width: 450px; border-radius: 12px; padding: 25px; color: #1e293b; box-shadow: 0 20px 25px rgba(0,0,0,0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+        <h3 style="margin: 0; color: #0f172a;">👤 My Delivery Profile</h3>
+        <button (click)="toggleProfileModal()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #94a3b8;">✕</button>
+      </div>
+
+      <div style="font-size: 14px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+        <div><span style="color:#64748b;">Name:</span> <strong>{{ partnerProfile.name || 'Balaji Pitta' }}</strong></div>
+        <div><span style="color:#64748b;">Email:</span> <strong>{{ partnerProfile.email }}</strong></div>
+        <div><span style="color:#64748b;">Mobile:</span> <strong>{{ partnerProfile.mobileNumber }}</strong></div>
+        <div><span style="color:#64748b;">🏦 Bank Account:</span> <strong style="color: #0284c7;">{{ partnerProfile.bankAccountNumber || 'SBI - XXXXXX1234' }}</strong></div>
+      </div>
+
+      <hr style="border:1px solid #f1f5f9; margin: 15px 0;">
+      <h4 style="margin: 0 0 10px 0; color:#0f172a;">💸 Transfer Earnings to Bank</h4>
+      <p style="margin:0 0 10px 0; font-size:12px; color:#64748b;">ప్రస్తుత వాలెట్ బ్యాలెన్స్: <strong>₹{{ partnerProfile.walletBalance }}</strong></p>
+      
+      <div style="margin-bottom: 15px;">
+        <input type="number" [(ngModel)]="transferAmount" placeholder="Enter amount to transfer (₹)" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; background: white; color: #1e293b;">
+      </div>
+
+      <button (click)="transferWalletToBank()" style="width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">
+        🏦 Transfer to Bank Account
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="register-container">
+  <h2>SmartStore - User Registration</h2>
+  
+  <form (submit)="$event.preventDefault()">
+    <div class="form-group">
+      <label>Select Role:</label>
+      <select name="role" [(ngModel)]="userObj.role" required>
+        <option value="USER">Customer (కస్టమర్)</option>
+        <option value="DELIVERY">Delivery Partner (డెలివరీ బాయ్)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Full Name:</label>
+      <input type="text" name="name" [(ngModel)]="userObj.name" required placeholder="Enter your name">
+    </div>
+
+    <div class="form-group">
+      <label>Email Address:</label>
+      <input type="email" name="email" [(ngModel)]="userObj.email" required placeholder="Enter email address">
+    </div>
+
+    <div class="form-group">
+      <label>Mobile Number:</label>
+      <input type="text" name="mobileNumber" [(ngModel)]="userObj.mobileNumber" required placeholder="Enter mobile number">
+    </div>
+
+    <div class="form-group">
+      <label>Age:</label>
+      <input type="number" name="age" [(ngModel)]="userObj.age" required placeholder="Enter your age">
+    </div>
+
+    <div class="form-group">
+      <label>Gender:</label>
+      <select name="gender" [(ngModel)]="userObj.gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
+
+    <div class="form-group" style="position: relative;">
+      <label>Password:</label>
+      <input 
+        [type]="showPassword ? 'text' : 'password'" 
+        name="password" 
+        [(ngModel)]="userObj.password" 
+        required 
+        placeholder="Enter password"
+        style="padding-right: 40px;"
+      >
+      <span 
+        (click)="togglePasswordVisibility()" 
+        style="position: absolute; right: 15px; top: 38px; cursor: pointer; font-size: 18px; user-select: none;"
+      >
+        {{ showPassword ? '👁️' : '🔒' }}
+      </span>
+    </div>
+
+    <div *ngIf="userObj.role === 'DELIVERY'" class="delivery-fields">
+      
+      
+      <div class="form-group">
+        <label>Account Number:</label>
+        <input type="text" name="accountNumber" [(ngModel)]="userObj.accountNumber" required placeholder="Enter bank account number">
+      </div>
+
+      <div class="form-group">
+        <label>IFSC Code:</label>
+        <input type="text" name="ifscCode" [(ngModel)]="userObj.ifscCode" required placeholder="Enter bank IFSC code">
+      </div>
+
+      <div class="form-group">
+        <label>Bank Name:</label>
+        <input type="text" name="bankName" [(ngModel)]="userObj.bankName" required placeholder="Enter bank name">
+      </div>
+
+      <div class="form-group">
+        <label>Aadhaar Number:</label>
+        <input type="text" name="aadhaarNumber" [(ngModel)]="userObj.aadhaarNumber" required placeholder="Enter 12 digit Aadhaar number">
+      </div>
+
+      <div class="form-group">
+        <label>PAN Card Number:</label>
+        <input type="text" name="panNumber" [(ngModel)]="userObj.panNumber" required placeholder="Enter PAN number">
+      </div>
+
+      <div class="form-group">
+        <label>Driving License Number:</label>
+        <input type="text" name="drivingLicenseNumber" [(ngModel)]="userObj.drivingLicenseNumber" required placeholder="Enter driving license number">
+      </div>
+    </div>
+
+    <button type="button" class="btn-register" (click)="onRegister()" [disabled]="isLoading">
+      <span *ngIf="!isLoading">Register Account 🚀</span>
+      <span *ngIf="isLoading">పరిశీలిస్తున్నాము, దయచేసి ఆగండి... ⏳</span>
+    </button>
+  </form>
+
+  <div class="login-link">
+    <p>ఆల్రెడీ అకౌంట్ ఉందా బ్రదర్? <a routerLink="/login">Sign In Here</a></p>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="otp-wrapper">
+  <div class="otp-card">
+    <div class="brand-section">
+      <span class="store-badge">🛒 SmartStore Security</span>
+    </div>
+
+    <div *ngIf="!isAccountCreated">
+      <h3>OTP Verification</h3>
+      
+      <div *ngIf="!isOtpSent">
+        <p class="subtitle">ఖాతా సృష్టించడాన్ని పూర్తి చేయడానికి దయచేసి వెరిఫికేషన్ విధానాన్ని ఎంచుకోండి బ్రదర్.</p>
+        
+        <div class="verification-options">
+          <label class="option-label" [class.active]="selectedMode === 'email'">
+            <input type="radio" name="authMode" value="email" [(ngModel)]="selectedMode">
+            <span class="custom-radio"></span>
+            <div class="option-text">
+              <strong>ఈమెయిల్ ద్వారా (Email OTP)</strong>
+              <p>ఓటీపీ మీ ఈమెయిల్ ఐడి కి పంపబడుతుంది</p>
+            </div>
+          </label>
+
+          <label class="option-label disabled">
+            <input type="radio" name="authMode" value="mobile" [(ngModel)]="selectedMode" disabled>
+            <span class="custom-radio"></span>
+            <div class="option-text">
+              <strong>మొబైల్ ద్వారా (SMS OTP) 🔒</strong>
+              <p>ప్రస్తుతం అందుబాటులో లేదు</p>
+            </div>
+          </label>
+        </div>
+
+        <button class="btn-get-otp" (click)="onSendOtp()" [disabled]="isLoading || selectedMode !== 'email'">
+          <span *ngIf="!isLoading">Get OTP 📩</span>
+          <span *ngIf="isLoading">పంపుతోంది... ⏳</span>
+        </button>
+      </div>
+
+      <div *ngIf="isOtpSent" class="otp-input-section">
+        <div class="success-alert">
+          🟢 మీ ఈమెయిల్ ఐడి కి 6 అంకెల OTP విజయవంతంగా పంపాము బ్రదర్!
+        </div>
+        
+        <div class="input-group-custom">
+          <label for="otp">Enter 6-Digit OTP</label>
+          <input type="text" id="otp" [(ngModel)]="enteredOtp" name="enteredOtp" maxlength="6" placeholder="• • • • • •">
+        </div>
+
+        <button class="btn-submit-otp" (click)="onVerifyOtp()" [disabled]="isVerifying">
+          <span *ngIf="!isVerifying">Submit & Create Account 🚀</span>
+          <span *ngIf="isVerifying" class="spinner-container">
+            <span class="spinner"></span> వెరిఫై అవుతోంది, దయచేసి ఆగండి...
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isAccountCreated" class="success-screen">
+      <div class="success-icon">✔️</div>
+      <h3>Account Created!</h3>
+      <p class="success-p">మీ అకౌంట్ విజయవంతంగా క్రియేట్ చేయబడింది బ్రదర్.</p>
+      <button class="btn-goto-login" (click)="goToLogin()">Back to Sign-In</button>
+    </div>
+
+  </div>
+</div>

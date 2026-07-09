@@ -1,0 +1,100 @@
+<div class="cart-page-container">
+  <div class="cart-header">
+    <button class="btn-back" (click)="goBackToHome()">⬅️ Continue Shopping</button>
+    <h2>🛍️ Checkout Invoice Summary</h2>
+  </div>
+
+  <div class="cart-layout">
+    <div class="cart-items-section">
+      <h3>Items Details</h3>
+      <div *ngFor="let item of cartItems" class="cart-item-row">
+        <img [src]="item.imageUrl" class="mini-prod-img" alt="{{ item.name }}">
+        <div class="item-details">
+          <h4>{{ item.name }}</h4>
+          <p class="cat-tag">{{ item.category }}</p>
+        </div>
+       <div class="item-qty-price">
+  <div class="quantity-controls">
+    <button (click)="decreaseQuantity(item)">-</button>
+    <span class="qty-calc">{{ item.selectedQty }}</span>
+    <button (click)="increaseQuantity(item)">+</button>
+  </div>
+  
+  <span class="row-total">₹{{ item.selectedQty * item.price | number:'1.2-2' }}</span>
+</div>
+      </div>
+    </div>
+
+    <div class="billing-summary-section">
+      <h3>📜 Bill Summary</h3>
+      
+      <div class="coupon-box">
+        <input type="text" [(ngModel)]="voucherCode" placeholder="Enter Coupon Code (SMART50)">
+        <button (click)="applyVoucher()">Apply</button>
+      </div>
+      <p *ngIf="discount > 0" class="discount-success">🎉 Promo Code Applied! ₹{{ discount }} Saved.</p>
+
+      <div class="bill-table">
+        <div class="bill-row">
+          <span>Item Total:</span>
+          <span>₹{{ itemTotal | number:'1.2-2' }}</span>
+        </div>
+        <div class="bill-row">
+          <span>Delivery Charges:</span>
+          <span [class.free]="deliveryCharge === 0">{{ deliveryCharge === 0 ? 'FREE' : '₹' + deliveryCharge }}</span>
+        </div>
+        <div class="bill-row">
+          <span>GST Tax (5%):</span>
+          <span>₹{{ gstTax | number:'1.2-2' }}</span>
+        </div>
+        <div *ngIf="discount > 0" class="bill-row discount">
+          <span>Voucher Discount:</span>
+          <span>- ₹{{ discount | number:'1.2-2' }}</span>
+        </div>
+        <hr class="bill-line">
+        <div class="bill-row grand-total">
+          <strong>Grand Total:</strong>
+          <strong class="total-price">₹{{ grandTotal | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <div class="address-selection-box" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #cbd5e1;">
+  <h4 style="margin-top: 0; color: #0f172a; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">📍 Select Delivery Location:</h4>
+  
+  <div *ngIf="userAddresses.length === 0" style="color: #ef4444; font-size: 13px;">
+    ⚠️ ప్రొఫైల్ లో ఎలాంటి అడ్రస్ లేదు బ్రదర్! దయచేసి హోమ్ స్క్రీన్ ప్రొఫైల్ లో అడ్రస్ యాడ్ చేయండి.
+  </div>
+
+  <div *ngFor="let addr of userAddresses" style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px;">
+      <input type="radio" name="deliveryAddr" [value]="addr.id" [(ngModel)]="selectedAddressId">
+      <div>
+        <span style="font-size: 11px; font-weight: bold; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-right: 5px;">{{ addr.addressType }}</span>
+        <span style="color: #334155;">{{ addr.addressDetails }}</span>
+      </div>
+    </label>
+  </div>
+</div>
+
+      <div class="payment-methods" *ngIf="showPaymentOptions">
+        <h4>💵 Select Payment Method:</h4>
+        <div class="pay-option">
+          <label><input type="radio" name="payMode" value="Cash on Delivery" [(ngModel)]="paymentMode" checked> 🚚 Cash on Delivery (COD)</label>
+        </div>
+        <div class="pay-option">
+          <label><input type="radio" name="payMode" value="UPI (PhonePe/GPay)" [(ngModel)]="paymentMode"> 📱 PhonePe / Google Pay (UPI)</label>
+        </div>
+        <div class="pay-option">
+    <label style="font-weight: 500;">
+      <input type="radio" name="payMode" value="WALLET" [(ngModel)]="paymentMode"> 
+      CNG 💳 SmartStore Wallet <span style="color: #16a34a; font-weight: bold;">(Available: ₹{{ walletBalance | number:'1.2-2' }})</span>
+    </label>
+  </div>
+      </div>
+
+      <button class="btn-proceed" (click)="handleOrderFlow()">
+        {{ showPaymentOptions ? 'Confirm & Place Order 🚀' : 'Proceed to Payment 💳' }}
+      </button>
+    </div>
+  </div>
+</div>

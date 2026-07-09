@@ -1,0 +1,101 @@
+<div class="login-container">
+  
+  <div *ngIf="!isForgotMode">
+    <h2>SmartStore - Sign In</h2>
+    <form (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label>Email Address / Username:</label>
+        <input type="email" name="email" [(ngModel)]="loginObj.email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group" style="position: relative;">
+        <label>Password:</label>
+        <input 
+          [type]="showPassword ? 'text' : 'password'" 
+          name="password" 
+          [(ngModel)]="loginObj.password" 
+          placeholder="Enter password" 
+          required
+          style="padding-right: 40px;"
+        >
+        <span 
+          (click)="togglePasswordVisibility()" 
+          style="position: absolute; right: 15px; top: 38px; cursor: pointer; font-size: 18px; user-select: none;"
+        >
+          {{ showPassword ? '👁️' : '🔒' }}
+        </span>
+      </div>
+
+      <button type="submit" class="btn-login">Sign In</button>
+      
+      <div class="register-link" style="margin-top: 15px;">
+        <a href="javascript:void(0)" (click)="switchToForgotMode(true)" style="color: #dc3545;">Forgot Password?</a>
+      </div>
+
+      <div class="register-link">
+        <p>New User? <a routerLink="/register">Create Account</a></p>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="isForgotMode">
+    
+    <div *ngIf="forgotStep === 1">
+      <h2>Forgot Password</h2>
+      <div class="form-group">
+        <label>Select Verification Mode:</label>
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+          <label style="font-weight: normal; cursor: pointer;">
+            <input type="radio" name="forgotMode" (click)="verificationMode = 'email'"> Email Mode
+          </label>
+          <label style="font-weight: normal; color: #aaa; cursor: not-allowed;">
+            <input type="radio" name="forgotMode" (click)="showMobileAlert()"> Mobile Mode (Disabled)
+          </label>
+        </div>
+      </div>
+
+      <div *ngIf="verificationMode === 'email'">
+        <div class="form-group">
+          <label>Registered Email Address:</label>
+          <input type="email" [(ngModel)]="forgotEmail" placeholder="Enter your registered email">
+        </div>
+        <button (click)="sendOtpToEmail()" class="btn-login" style="background-color: #007bff;">Get OTP</button>
+      </div>
+    </div>
+
+    <div *ngIf="forgotStep === 2">
+      <h2>Enter Verification Code</h2>
+      <p style="text-align: center; color: #666; font-size: 14px;">We sent a 4-digit OTP to <b>{{forgotEmail}}</b></p>
+      <div class="form-group">
+        <label>Enter 4-Digit OTP:</label>
+        <input type="text" [(ngModel)]="enteredOtp" placeholder="Enter OTP" maxlength="4" style="text-align: center; font-size: 18px; letter-spacing: 5px;">
+      </div>
+      <button (click)="verifyEnteredOtp()" class="btn-login" style="background-color: #17a2b8;">Verify OTP</button>
+    </div>
+
+    <div *ngIf="forgotStep === 3">
+      <h2>Reset Password</h2>
+      <div class="form-group">
+        <label>New Password:</label>
+        <input type="password" [(ngModel)]="newPasswordObj.newPassword" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password:</label>
+        <input type="password" [(ngModel)]="newPasswordObj.confirmPassword" placeholder="Confirm new password">
+      </div>
+      <button (click)="resetUserPassword()" class="btn-login" style="background-color: #28a745;">Submit New Password</button>
+    </div>
+
+    <div *ngIf="forgotStep === 4" style="text-align: center;">
+      <h2 style="color: #28a745;">🎉 Success!</h2>
+      <p style="font-size: 15px; color: #555; margin-bottom: 25px;">Your password has been changed successfully in the database.</p>
+      <button (click)="switchToForgotMode(false)" class="btn-login" style="background-color: #343a40;">Back to Sign In Page</button>
+    </div>
+
+    <div *ngIf="forgotStep < 4" class="register-link" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+      <a href="javascript:void(0)" (click)="switchToForgotMode(false)" style="color: #6c757d;">← Cancel & Go Back</a>
+    </div>
+
+  </div>
+
+</div>
