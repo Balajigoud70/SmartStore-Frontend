@@ -66,7 +66,8 @@ export class LoginComponent {
       password: this.loginObj.password
     };
 
-    this.http.post('${environment.apiUrl}/api/users/login', null, { 
+    this.http.post(`${environment.apiUrl}/api/users/login`
+      , null, { 
       params: loginParams, 
       responseType: 'text' 
     })
