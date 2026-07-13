@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadProductsFromBackend() {
-    this.http.get<any[]>('${environment.apiUrl}/api/products/all').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/products/all`).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.allProducts = data.map(p => ({
@@ -206,7 +206,7 @@ export class HomeComponent implements OnInit {
       state: this.newState
     };
 
-    this.http.post('${environment.apiUrl}/api/addresses/add', addressBody).subscribe({
+    this.http.post(`${environment.apiUrl}/api/addresses/add`, addressBody).subscribe({
       next: (res) => { 
         alert("🎉 కొత్త ముక్కల అడ్రస్ డేటాబేస్ లో విజయవంతంగా సేవ్ అయింది బ్రదర్!"); 
         // 🔄 ఫామ్ బాక్సులను క్లియర్ చేస్తున్నాం స్వామి

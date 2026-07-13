@@ -43,7 +43,7 @@ export class OtpVerificationComponent implements OnInit {
     this.isLoading = true; 
     
     // 🎯 1. కొత్త ఆథెంటికేషన్ API ఎండ్‌పాయింట్‌కి మార్చా బ్రదర్!
-    this.http.post('${environment.apiUrl}/api/auth/register', this.userData, { responseType: 'text' })
+    this.http.post(`${environment.apiUrl}/api/auth/register`, this.userData, { responseType: 'text' })
       .subscribe({
         next: (res: string) => {
           this.isLoading = false;
@@ -79,7 +79,7 @@ export class OtpVerificationComponent implements OnInit {
     };
 
     // 🎯 2. ఓటీపీ వెరిఫికేషన్ ఎండ్‌పాయింట్ కూడా కొత్త దానికి లింక్ చేసా స్వామి!
-    this.http.post('${environment.apiUrl}/api/auth/verify-otp', null, {
+    this.http.post(`${environment.apiUrl}/api/auth/verify-otp`, null, {
       params: otpPayload,
       responseType: 'text'
     })

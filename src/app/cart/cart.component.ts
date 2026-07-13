@@ -131,7 +131,7 @@ export class CartComponent implements OnInit {
         }))
       };
 
-      this.http.post('${environment.apiUrl}/api/orders/place', orderData, { responseType: 'text' })
+      this.http.post(`${environment.apiUrl}/api/orders/place`, orderData, { responseType: 'text' })
         .subscribe({
           next: (response) => {
             alert(`🎉 ${response}`); 

@@ -59,7 +59,7 @@ export class DeliveryComponent implements OnInit {
   // 📋 ట్యాబ్ 1 లాజిక్: డేటాబేస్ నుండి ఖాళీగా (Available) ఉన్న ఆర్డర్స్ తేవడం
   // =========================================================================
   loadOpenOrdersFromDB() {
-    this.http.get<any[]>('${environment.apiUrl}/api/orders/all').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/orders/all`).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.openOrdersPool = data.filter(o => !o.deliveryPartnerId && (o.status === 'booked' || o.status === 'Booked' || o.status === 'Pending'));
